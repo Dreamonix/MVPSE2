@@ -20,6 +20,7 @@ public class CounterViewImpl extends Application implements ICounterView {
     @Override
     public void updateCounter(int value) {
         if (counterLabel != null) {
+            System.out.println("View: Updating counter label with value: " + value);
             counterLabel.setText("Counter: " + value);
         }
     }
@@ -44,8 +45,18 @@ public class CounterViewImpl extends Application implements ICounterView {
         Button incrementButton = new Button("Increment");
         Button resetButton = new Button("Reset");
 
-        incrementButton.setOnAction(e -> presenter.onIncrement());
-        resetButton.setOnAction(e -> presenter.onReset());
+        incrementButton.setOnAction(e -> {
+            System.out.println("View: Increment button clicked" + " - notifying presenter.");
+            // Simulate a delay to show the asynchronous nature of the presenter
+            try { Thread.sleep(2000); } catch (InterruptedException ex) { Thread.currentThread().interrupt(); }
+            presenter.onIncrement();
+        });
+        resetButton.setOnAction(e -> {
+            System.out.println("View: Reset button clicked" + " - notifying presenter.");
+            // Simulate a delay to show the asynchronous nature of the presenter
+            try { Thread.sleep(2000); } catch (InterruptedException ex) { Thread.currentThread().interrupt(); }
+            presenter.onReset();
+        });
 
         VBox root = new VBox(10, counterLabel, incrementButton, resetButton);
         root.setPadding(new Insets(20));
