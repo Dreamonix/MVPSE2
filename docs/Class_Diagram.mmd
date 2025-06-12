@@ -1,0 +1,48 @@
+classDiagram
+    class ICounterModel {
+        +int getCount()
+        +void increment()
+        +void reset()
+    }
+    class CounterModel
+    ICounterModel <|.. CounterModel
+
+    class ICounterPresenter {
+        +void onIncrement()
+        +void onReset()
+    }
+    class CounterPresenter {
+        -ICounterModel model
+        -ICounterView view
+        +CounterPresenter(ICounterModel model, ICounterView view)
+        +onIncrement()
+        +onReset()
+    }
+    ICounterPresenter <|.. CounterPresenter
+
+    class ICounterView {
+        +void setPresenter(ICounterPresenter presenter)
+        +void updateCounter(int value)
+        +void show()
+    }
+    class CounterViewImpl {
+        -ICounterPresenter presenter
+        +setPresenter(ICounterPresenter presenter)
+        +updateCounter(int value)
+        +show()
+        +start(Stage primaryStage)
+    }
+    ICounterView <|.. CounterViewImpl
+
+    class AppBootstrapper {
+        +void start(Stage primaryStage)
+        +static void main(String[] args)
+    }
+
+    AppBootstrapper ..> CounterViewImpl : creates
+    AppBootstrapper ..> CounterModel : creates
+    AppBootstrapper ..> CounterPresenter : creates
+
+    CounterPresenter o-- ICounterModel
+    CounterPresenter o-- ICounterView
+    CounterViewImpl o-- ICounterPresenter
