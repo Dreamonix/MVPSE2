@@ -1,0 +1,26 @@
+sequenceDiagram
+    participant User
+    participant CounterViewImpl
+    participant CounterPresenter
+    participant CounterModel
+
+    User->>CounterViewImpl: Klickt Increment Button
+    Note over CounterViewImpl: System.out.println("View: Increment button clicked - notifying presenter.")
+    Note over CounterViewImpl: Verzögerung (2 Sekunden)
+    CounterViewImpl->>CounterPresenter: onIncrement()
+    Note over CounterPresenter: System.out.println("Presenter: Increment button was clicked now updating model." + model.getCount())
+    Note over CounterPresenter: Verzögerung (2 Sekunden)
+    CounterPresenter->>CounterModel: increment()
+    Note over CounterModel: System.out.println("Model: Got increment request from presenter, incrementing count.")
+    Note over CounterModel: Verzögerung (2 Sekunden)
+    CounterModel-->>CounterModel: count++
+    CounterModel-->>CounterPresenter: Rückgabe der Kontrolle
+    Note over CounterPresenter: System.out.println("Presenter: Model was updated, updating view." + model.getCount())
+    Note over CounterPresenter: Verzögerung (2 Sekunden)
+    CounterPresenter->>CounterModel: getCount()
+    CounterModel-->>CounterPresenter: gibt aktuellen count-Wert zurück
+    CounterPresenter->>CounterPresenter: updateView()
+    CounterPresenter->>CounterViewImpl: updateCounter(model.getCount())
+    Note over CounterViewImpl: System.out.println("View: Updating counter label with value: " + value)
+    CounterViewImpl-->>CounterViewImpl: counterLabel.setText("Counter: " + value)
+    CounterViewImpl-->>User: Zeigt aktualisierten Zählerstand
